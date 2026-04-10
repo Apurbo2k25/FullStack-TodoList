@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+//// The base URL for the hosted backend API on Render. 
+// Replace this with localhost:8081 during local development if needed.
+const API_URL = "https://todo-backend-bnzm.onrender.com/api";
+
 function App() {
   
   const [newTodo, setNewTodo] = useState("");
@@ -10,40 +14,34 @@ function App() {
   const [searchTask, setSearchTask] = useState("");
   const [error, setError] = useState(null);
 
-  // Fetch all tasks from MongoDB when the app starts
+  // Fetch all tasks
   const fetchTodos = async () => {
     setError(null); 
     try {
-      const response = await axios.get("/api/todos");
+      const response = await axios.get(`${API_BASE_URL}/todos`);
       setTodos(response.data);
     } catch (err) {
       setError("Connection failed. Check if your backend server is running! ❌");
     }
   };
 
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
-  // Send a POST request to save a new task
+  // Add a new task
   const addTodo = async (e) => {
     e.preventDefault();
     if (!newTodo.trim()) return;
-
     try {
-      const response = await axios.post("/api/todos", { text: newTodo });
-      setTodos([...todos, response.data]); // Update UI with the new item from DB
+      const response = await axios.post(`${API_BASE_URL}/todos`, { text: newTodo });
+      setTodos([...todos, response.data]);
       setNewTodo(""); 
     } catch (error) {
       setError("Failed to add task.");
     }
   };
 
-  // Update task text in the database
+  // Update task text
   const updateTodo = async (id) => {
     try {
-      const response = await axios.patch(`/api/todos/${id}`, { text: updateText });
-      // Map through the list and replace only the edited task
+      const response = await axios.patch(`${API_BASE_URL}/todos/${id}`, { text: updateText });
       setTodos(todos.map((todo) => (todo._id === id ? response.data : todo)));
       setEditingId(null);
     } catch (error) {
@@ -51,20 +49,20 @@ function App() {
     }
   };
 
-  // Remove task from database and filter it out from the UI
+  // Delete task
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`/api/todos/${id}`);
+      await axios.delete(`${API_BASE_URL}/todos/${id}`);
       setTodos(todos.filter((todo) => todo._id !== id));
     } catch (error) {
       setError("Could not delete task.");
     }
   };
 
-  // Toggle the 'completed' boolean in MongoDB
+  // Toggle complete
   const toggleComplete = async (todo) => {
     try {
-      const response = await axios.patch(`/api/todos/${todo._id}`, { 
+      const response = await axios.patch(`${API_BASE_URL}/todos/${todo._id}`, { 
         completed: !todo.completed 
       });
       setTodos(todos.map((t) => (t._id === todo._id ? response.data : t)));
@@ -119,10 +117,16 @@ function App() {
         )}
 
         <div className="flex flex-col gap-3">
+
+           // check if there are any todos available
+
           {todos.length > 0 ? 
+          
           (
             todos
+                 // filter todos based on search input (case insensitive search)
               .filter(t => t.text.toLowerCase().includes(searchTask.toLowerCase()))
+                // map through todos and render each todo item 
               .map((todo) => (
                 <div key={todo._id}
                  className="flex items-center gap-3 p-3
@@ -134,6 +138,8 @@ function App() {
                      className=
                      {`h-5 w-5 rounded-full border flex items-center
                        justify-center shrink-0 transition-all
+
+                       {/* apply different styles depending on completed status */}
                     ${
                       todo.completed ?
                       "bg-green-500 border-green-500 text-white"
@@ -141,6 +147,7 @@ function App() {
                       "border-gray-300"
                     }`}
                   >
+                    
                     {todo.completed && <span className="text-[10px]">✔️</span>}
                   </button>
 
@@ -154,6 +161,7 @@ function App() {
                         value={updateText}
                         onChange={(e) => setUpdateText(e.target.value)}
                       />
+
                       <button className="bg-green-500  rounded px-3
                        font-semibold hover:bg-green-600 "
                        onClick={() => updateTodo(todo._id)}>Save</button>
@@ -166,8 +174,13 @@ function App() {
 
                     <div className="flex flex-1 items-center
                      justify-between min-w-0 font-semibold">
+
+{/* span is used to display the todo text. truncate is used so that if the text is 
+  very long it will not break the layout if the task is completed we show line-through
+  style to indicate it is done
+*/}
                       
-                      <span className=
+                      <span className= 
                       {`truncate text-sm 
                         ${todo.completed ?
                        'line-through text-red-500'
@@ -177,7 +190,13 @@ function App() {
                       {todo.text}
                       </span>
 
+
+
                       <div className="flex gap-2 ml-2 shrink-0">
+ {/* edit button: when clicked it switches the todo into editing mode.
+      we store the id of the todo we want to edit in editingId.
+      we also copy the current text into updateText so it appears inside the input box.
+ */}
                         <button onClick={() => { setEditingId(todo._id); setUpdateText(todo.text); }}
                          className="p-1 hover:bg-amber-300 rounded-full text-lg">🖋️</button>
                         <button onClick={() => deleteTodo(todo._id)} 
