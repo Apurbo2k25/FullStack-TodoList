@@ -118,13 +118,12 @@ function App() {
 
         <div className="flex flex-col gap-3">
 
-           {/* // check if there are any todos available */}
 
           {todos.length > 0 ? 
           
           (
             todos
-                 filter todos based on search input (case insensitive search)
+                //  filter todos based on search input (case insensitive search)
               .filter(t => t.text.toLowerCase().includes(searchTask.toLowerCase()))
                 // map through todos and render each todo item 
               .map((todo) => (
