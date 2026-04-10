@@ -3,7 +3,7 @@ import axios from "axios";
 
 //// The base URL for the hosted backend API on Render. 
 // Replace this with localhost:8081 during local development if needed.
-const API_URL = "https://todo-backend-bnzm.onrender.com/api";
+const API_URL = "https://todo-backend-bnzm.onrender.com/api/todos";
 
 function App() {
   
