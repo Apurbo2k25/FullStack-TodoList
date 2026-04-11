@@ -74,10 +74,10 @@ root/
 
 I used Thunder Client instead of Postman because it is integrated directly into VS Code, making debugging faster.
 
-# GET /api/todos: Verified data fetching from MongoDB.
-# POST /api/todos: Tested task creation with JSON bodies.
-# PATCH /api/todos/:id: Verified status toggling and text edits.
-# DELETE /api/todos/:id: Confirmed task removal.
+- GET /api/todos: Verified data fetching from MongoDB.
+- POST /api/todos: Tested task creation with JSON bodies.
+- PATCH /api/todos/:id: Verified status toggling and text edits.
+- DELETE /api/todos/:id: Confirmed task removal.
 
 # Result: 
  All endpoints returned correct status codes (200 OK, 201 Created) 
