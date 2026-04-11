@@ -18,19 +18,24 @@ function App() {
   const fetchTodos = async () => {
     setError(null); 
     try {
-      const response = await axios.get(`${API_BASE_URL}/todos`);
+      const response = await axios.get(`${API_URL}`);
       setTodos(response.data);
     } catch (err) {
       setError("Connection failed. Check if your backend server is running! ❌");
     }
   };
 
+  useEffect(()=>{
+    fetchTodos();
+
+  },[])// that empty dependency array ensures it only runs once when the page loads//
+
   // Add a new task
   const addTodo = async (e) => {
     e.preventDefault();
     if (!newTodo.trim()) return;
     try {
-      const response = await axios.post(`${API_BASE_URL}/todos`, { text: newTodo });
+      const response = await axios.post(`${API_URL}`, { text: newTodo });
       setTodos([...todos, response.data]);
       setNewTodo(""); 
     } catch (error) {
@@ -41,7 +46,7 @@ function App() {
   // Update task text
   const updateTodo = async (id) => {
     try {
-      const response = await axios.patch(`${API_BASE_URL}/todos/${id}`, { text: updateText });
+      const response = await axios.patch(`${API_URL}/${id}`, { text: updateText });
       setTodos(todos.map((todo) => (todo._id === id ? response.data : todo)));
       setEditingId(null);
     } catch (error) {
@@ -52,7 +57,7 @@ function App() {
   // Delete task
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`${API_BASE_URL}/todos/${id}`);
+      await axios.delete(`${API_URL}/${id}`);
       setTodos(todos.filter((todo) => todo._id !== id));
     } catch (error) {
       setError("Could not delete task.");
@@ -62,7 +67,7 @@ function App() {
   // Toggle complete
   const toggleComplete = async (todo) => {
     try {
-      const response = await axios.patch(`${API_BASE_URL}/todos/${todo._id}`, { 
+      const response = await axios.patch(`${API_URL}/${todo._id}`, { 
         completed: !todo.completed 
       });
       setTodos(todos.map((t) => (t._id === todo._id ? response.data : t)));
