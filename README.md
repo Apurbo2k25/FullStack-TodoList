@@ -56,18 +56,19 @@ Solution: I decided to use client-side filtering. By applying .filter() to the s
 
 # 📁 Project Structure
 
+```text
 root/
 ├── backend/
-│   ├── controllers/  # Logic for handling requests/responses
-│   ├── models/       # Mongoose schema for Todo items
-│   ├── routes/       # API endpoint definitions
-│   └── server.js     # Entry point for the backend
+│   ├── controllers/    # Logic for handling requests/responses
+│   ├── models/         # Mongoose schema for Todo items
+│   ├── routes/         # API endpoint definitions
+│   └── server.js       # Entry point for the backend
 ├── frontend/
-│   ├── src/          # React components and Tailwind styling
-│   └── public/       # Static assets
-├── .gitignore        # Files to be ignored by Git (node_modules, .env)
-└── README.md         # Documentation
-
+│   ├── src/            # React components and Tailwind styling
+│   └── public/         # Static assets
+├── .gitignore          # Files to be ignored by Git (node_modules, .env)
+└── README.md           # Documentation
+```
 
 # 🔎 API Testing
 
@@ -89,6 +90,6 @@ I built this project through self-directed learning and research. I used documen
 
 # Links🔗:
 
-Live Demo: [Netlify Link Here]
+✅Live Demo: [https://todolist-app-2026.netlify.app/]
 
-Backend API: [Render Link Here]
+✅Backend API: [https://todo-backend-bnzm.onrender.com/api/todos]
